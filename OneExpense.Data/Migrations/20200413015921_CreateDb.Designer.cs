@@ -10,7 +10,7 @@ using OneExpense.Data.Context;
 namespace OneExpense.Data.Migrations
 {
     [DbContext(typeof(OneExpenseDbContext))]
-    [Migration("20200413014349_CreateDb")]
+    [Migration("20200413015921_CreateDb")]
     partial class CreateDb
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
