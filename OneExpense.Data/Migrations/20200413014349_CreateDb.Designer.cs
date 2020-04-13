@@ -10,8 +10,8 @@ using OneExpense.Data.Context;
 namespace OneExpense.Data.Migrations
 {
     [DbContext(typeof(OneExpenseDbContext))]
-    [Migration("20200411173255_InitialDb")]
-    partial class InitialDb
+    [Migration("20200413014349_CreateDb")]
+    partial class CreateDb
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -37,7 +37,7 @@ namespace OneExpense.Data.Migrations
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasColumnType("varchar(250)");
+                        .HasColumnType("varchar(200)");
 
                     b.HasKey("Id");
 

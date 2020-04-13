@@ -35,7 +35,7 @@ namespace OneExpense.Data.Migrations
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasColumnType("varchar(250)");
+                        .HasColumnType("varchar(200)");
 
                     b.HasKey("Id");
 
