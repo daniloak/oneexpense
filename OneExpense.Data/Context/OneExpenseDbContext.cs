@@ -1,6 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using OneExpense.Business.Models;
+using System;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace OneExpense.Data.Context
 {
@@ -11,8 +14,8 @@ namespace OneExpense.Data.Context
 
         }
 
-        public DbSet<Expense> Expenses { get; set; }
-        public DbSet<ExpenseDetails> ExpenseDetails { get; set; }
+        public DbSet<ExpenseReport> ExpenseReports { get; set; }
+        public DbSet<ExpenseReportDetail> ExpenseReportDetails { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -29,6 +32,24 @@ namespace OneExpense.Data.Context
             modelBuilder.HasPostgresExtension("uuid-ossp");
 
             base.OnModelCreating(modelBuilder);
+        }
+
+        public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
+        {
+            foreach (var entry in ChangeTracker.Entries().Where(entry => entry.Entity.GetType().GetProperty("CreateDate") != null))
+            {
+                if (entry.State == EntityState.Added)
+                {
+                    entry.Property("CreateDate").CurrentValue = DateTime.Now;
+                }
+
+                if (entry.State == EntityState.Modified)
+                {
+                    entry.Property("CreateDate").IsModified = false;
+                }
+            }
+
+            return base.SaveChangesAsync(cancellationToken);
         }
     }
 }

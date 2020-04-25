@@ -11,9 +11,8 @@
   "profiles": {
     "IIS Express": {
       "commandName": "IISExpress",
-      "launchBrowser": true,
-      "launchUrl": "weatherforecast",
       "environmentVariables": {
+        "AZURE_STORAGE_CONNECTION_STRING": "DefaultEndpointsProtocol=https;AccountName=oneexpense;AccountKey=k0FYOzJu/3elJVZymYiODAclwP30n4XEhOQ0VQvVODw1c5tVF9UTbh1MNiXUH4CTdovNiI/oETneXwLWCUUQFw==;EndpointSuffix=core.windows.net",
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
@@ -32,6 +31,10 @@
       "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}/",
       "publishAllPorts": true,
       "useSSL": true
+    },
+    "Azure Dev Spaces": {
+      "commandName": "AzureDevSpaces",
+      "launchBrowser": true
     }
   }
 }

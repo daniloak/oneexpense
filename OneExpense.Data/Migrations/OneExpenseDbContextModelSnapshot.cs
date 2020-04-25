@@ -20,12 +20,33 @@ namespace OneExpense.Data.Migrations
                 .HasAnnotation("ProductVersion", "3.1.3")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
-            modelBuilder.Entity("OneExpense.Business.Models.Expense", b =>
+            modelBuilder.Entity("OneExpense.Business.Models.ExpenseReport", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid")
                         .HasDefaultValueSql("uuid_generate_v4()");
+
+                    b.Property<DateTime>("CreateDate")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("varchar(200)");
+
+                    b.Property<decimal>("Total")
+                        .HasColumnType("numeric");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ExpenseReports");
+                });
+
+            modelBuilder.Entity("OneExpense.Business.Models.ExpenseReportDetail", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
 
                     b.Property<decimal>("Amount")
                         .HasColumnType("numeric");
@@ -37,39 +58,26 @@ namespace OneExpense.Data.Migrations
                         .IsRequired()
                         .HasColumnType("varchar(200)");
 
-                    b.HasKey("Id");
-
-                    b.ToTable("Expenses");
-                });
-
-            modelBuilder.Entity("OneExpense.Business.Models.ExpenseDetails", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<decimal>("Amount")
-                        .HasColumnType("numeric");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("varchar(100)");
-
                     b.Property<Guid>("ExpenseId")
                         .HasColumnType("uuid");
 
+                    b.Property<string>("Image")
+                        .HasColumnType("varchar(100)");
+
                     b.Property<string>("Supplier")
+                        .IsRequired()
                         .HasColumnType("varchar(100)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("ExpenseId");
 
-                    b.ToTable("ExpenseDetails");
+                    b.ToTable("ExpenseReportDetails");
                 });
 
-            modelBuilder.Entity("OneExpense.Business.Models.ExpenseDetails", b =>
+            modelBuilder.Entity("OneExpense.Business.Models.ExpenseReportDetail", b =>
                 {
-                    b.HasOne("OneExpense.Business.Models.Expense", "Expense")
+                    b.HasOne("OneExpense.Business.Models.ExpenseReport", "ExpenseReport")
                         .WithMany("Details")
                         .HasForeignKey("ExpenseId")
                         .IsRequired();

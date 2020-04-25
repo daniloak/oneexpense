@@ -1,6 +1,6 @@
 ﻿namespace OneExpense.Business.Models
 {
-    public enum StatusExpense
+    public enum StatusReportExpense
     {
 
     }

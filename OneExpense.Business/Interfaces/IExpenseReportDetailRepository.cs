@@ -6,10 +6,8 @@ using System.Threading.Tasks;
 
 namespace OneExpense.Business.Interfaces
 {
-    public interface IExpenseService : IDisposable
+    public interface IExpenseReportDetailRepository : IRepository<ExpenseReportDetail>
     {
-        Task Add(Expense expense);
-        Task Update(Expense expense);
-        Task Delete(Guid id);
+        Task<IEnumerable<ExpenseReportDetail>> GetDetailsByExpenseId(Guid id);
     }
 }

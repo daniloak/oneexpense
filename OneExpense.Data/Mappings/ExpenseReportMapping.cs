@@ -4,9 +4,9 @@ using OneExpense.Business.Models;
 
 namespace OneExpense.Data.Mappings
 {
-    public class ExpenseMapping : IEntityTypeConfiguration<Expense>
+    public class ExpenseReportMapping : IEntityTypeConfiguration<ExpenseReport>
     {
-        public void Configure(EntityTypeBuilder<Expense> builder)
+        public void Configure(EntityTypeBuilder<ExpenseReport> builder)
         {
             builder.HasKey(p => p.Id);
             builder.Property(p => p.Id).HasDefaultValueSql("uuid_generate_v4()");
@@ -16,13 +16,14 @@ namespace OneExpense.Data.Mappings
                 .HasColumnType("varchar(200)");
 
             builder.HasMany(f => f.Details)
-            .WithOne(p => p.Expense)
-            .HasForeignKey(p => p.ExpenseId);
-
-            builder.Property(p => p.Amount)
+                .WithOne(p => p.ExpenseReport)
+                .HasForeignKey(p => p.ExpenseId)
                 .IsRequired();
 
-            builder.ToTable("Expenses");
+            builder.Property(p => p.Total)
+                .IsRequired();
+
+            builder.ToTable("ExpenseReports");
 
             //todo:seed
         }
