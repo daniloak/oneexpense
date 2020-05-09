@@ -1,3 +1,3 @@
 # oneexpense
 
-![](https://github.com/daniloak/oneexpense/workflows/.github/workflows/master_one-expense.yml/badge.svg)
+![build](https://github.com/daniloak/oneexpense/blob/master/.github/workflows/master_one-expense.yml/badge.svg)
