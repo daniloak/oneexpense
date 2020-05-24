@@ -5,7 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using OneExpense.Identity.Configurations;
 
-namespace OneExpense.Identity
+namespace OneExpenseAuth
 {
     public class Startup
     {
