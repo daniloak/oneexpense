@@ -9,7 +9,7 @@ namespace OneExpense.Data.Context
 {
     public class OneExpenseDbContext : DbContext
     {
-        public OneExpenseDbContext(DbContextOptions options) : base(options)
+        public OneExpenseDbContext(DbContextOptions<OneExpenseDbContext> options) : base(options)
         {
 
         }
