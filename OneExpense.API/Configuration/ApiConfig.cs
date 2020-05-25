@@ -22,6 +22,16 @@ namespace OneExpense.API.Configuration
 
             services.AddAutoMapper(typeof(Startup));
 
+            services.AddCors(options =>
+            {
+                options.AddPolicy("Total",
+                    builder =>
+                        builder
+                            .AllowAnyOrigin()
+                            .AllowAnyMethod()
+                            .AllowAnyHeader());
+            });
+
             return services;
         }
 
@@ -38,6 +48,8 @@ namespace OneExpense.API.Configuration
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseCors("Total");
 
             app.UseIdentityConfiguration(env);
 
