@@ -13,7 +13,11 @@ namespace OneExpense.API.Configuration
     {
         public static IServiceCollection AddApiConfiguration(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddControllers();
+            services.AddControllers()
+                .AddJsonOptions(options=>
+                {
+                    options.JsonSerializerOptions.IgnoreNullValues = true;
+                });
 
             services.AddDbContext<OneExpenseDbContext>(options =>
             {

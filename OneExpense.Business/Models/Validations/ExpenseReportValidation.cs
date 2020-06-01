@@ -6,9 +6,9 @@ namespace OneExpense.Business.Models.Validations
     {
         public ExpenseReportValidation()
         {
-            RuleFor(f => f.Total)
-                .GreaterThan(0)
-                .WithMessage("Total deve ser maior que zero");
+            //RuleFor(f => f.Total)
+            //    .GreaterThan(0)
+            //    .WithMessage("Total deve ser maior que zero");
         }
     }
 }
