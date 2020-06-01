@@ -34,7 +34,7 @@ namespace OneExpense.Data.Migrations
                     Description = table.Column<string>(type: "varchar(200)", nullable: false),
                     Amount = table.Column<decimal>(nullable: false),
                     Image = table.Column<string>(type: "varchar(100)", nullable: true),
-                    Date = table.Column<DateTime>(nullable: false)
+                    CreateDate = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
                 {

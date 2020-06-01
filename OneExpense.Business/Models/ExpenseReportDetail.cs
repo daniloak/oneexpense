@@ -11,7 +11,7 @@ namespace OneExpense.Business.Models
         public string Description { get; set; }
         public decimal Amount { get; set; }
         public string Image { get; set; }
-        public DateTime Date { get; set; }
+        public DateTime CreateDate { get; set; }
         public ExpenseReport ExpenseReport { get; set; }
     }
 }

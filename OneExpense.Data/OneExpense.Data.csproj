@@ -17,8 +17,4 @@
     <ProjectReference Include="..\OneExpense.Business\OneExpense.Business.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Migrations\" />
-  </ItemGroup>
-
 </Project>

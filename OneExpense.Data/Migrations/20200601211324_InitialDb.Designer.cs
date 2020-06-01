@@ -10,7 +10,7 @@ using OneExpense.Data.Context;
 namespace OneExpense.Data.Migrations
 {
     [DbContext(typeof(OneExpenseDbContext))]
-    [Migration("20200419173442_InitialDb")]
+    [Migration("20200601211324_InitialDb")]
     partial class InitialDb
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -53,7 +53,7 @@ namespace OneExpense.Data.Migrations
                     b.Property<decimal>("Amount")
                         .HasColumnType("numeric");
 
-                    b.Property<DateTime>("Date")
+                    b.Property<DateTime>("CreateDate")
                         .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Description")

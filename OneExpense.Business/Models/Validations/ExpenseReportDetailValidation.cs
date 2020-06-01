@@ -10,9 +10,6 @@ namespace OneExpense.Business.Models.Validations
             RuleFor(f => f.Amount)
                 .GreaterThan(0)
                 .WithMessage("Valor despesa deve ser maior que zero");
-
-            RuleFor(f=>f.Date)
-                .Must(BeAValidDate).WithMessage("Data invalida");
         }
         private bool BeAValidDate(DateTime date)
         {
