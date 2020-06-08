@@ -4,7 +4,9 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using OneExpense.API.Controllers;
 using OneExpense.API.Extensions;
+using OneExpense.API.Interfaces;
 using OneExpense.API.ViewModel;
+using OneExpense.Business.Models;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
@@ -19,13 +21,14 @@ namespace OneExpenseAuth.Controllers
     [ApiController]
     public class AuthController : MainController
     {
-        private readonly SignInManager<IdentityUser> _signInManager;
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly SignInManager<CompanyUser> _signInManager;
+        private readonly UserManager<CompanyUser> _userManager;
         private readonly AppSettings _appSettings;
 
-        public AuthController(SignInManager<IdentityUser> signInManager,
-                              UserManager<IdentityUser> userManager,
-                              IOptions<AppSettings> appSettings)
+        public AuthController(SignInManager<CompanyUser> signInManager,
+                              UserManager<CompanyUser> userManager,
+                              IOptions<AppSettings> appSettings,
+                              ICompanyUserService appUser) : base(appUser)
         {
             _signInManager = signInManager;
             _userManager = userManager;
@@ -35,11 +38,12 @@ namespace OneExpenseAuth.Controllers
         [HttpPost("Create")]
         public async Task<ActionResult> Create(UserRecord userRecord)
         {
-            var user = new IdentityUser()
+            var user = new CompanyUser()
             {
                 UserName = userRecord.Email,
                 Email = userRecord.Email,
-                EmailConfirmed = true
+                EmailConfirmed = true,
+                CompanyId = userRecord.CompanyId
             };
 
             var result = await _userManager.CreateAsync(user, userRecord.Password);
@@ -83,7 +87,7 @@ namespace OneExpenseAuth.Controllers
             return GetUserTokenResponse(encodedToken, user, claims);
         }
 
-        private async Task<ClaimsIdentity> GetUserClaims(ICollection<Claim> claims, IdentityUser user)
+        private async Task<ClaimsIdentity> GetUserClaims(ICollection<Claim> claims, CompanyUser user)
         {
             var userRoles = await _userManager.GetRolesAsync(user);
 
@@ -123,7 +127,7 @@ namespace OneExpenseAuth.Controllers
             return encodedToken;
         }
 
-        private UserLoginResponse GetUserTokenResponse(string encodedToken, IdentityUser user, IEnumerable<Claim> claims)
+        private UserLoginResponse GetUserTokenResponse(string encodedToken, CompanyUser user, IEnumerable<Claim> claims)
         {
             return new UserLoginResponse
             {

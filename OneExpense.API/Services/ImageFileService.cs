@@ -1,6 +1,6 @@
 ﻿using Azure.Storage.Blobs;
 using Microsoft.Extensions.Configuration;
-using OneExpense.Business.Interfaces;
+using OneExpense.API.Interfaces;
 using System;
 using System.IO;
 using System.Threading.Tasks;

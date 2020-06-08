@@ -8,6 +8,7 @@ namespace OneExpense.API.Configuration
     {
         public AutoMapperConfig()
         {
+            CreateMap<Company, CompanyViewModel>().ReverseMap();
             CreateMap<ExpenseReport, ExpenseReportViewModel>().ReverseMap();
             CreateMap<ExpenseReportDetail, ExpenseReportDetailViewModel>().ReverseMap();
         }

@@ -1,4 +1,8 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.DependencyInjection;
+using OneExpense.API.Authorization;
+using OneExpense.API.Extensions;
+using OneExpense.API.Interfaces;
 using OneExpense.API.Services;
 using OneExpense.Business.Interfaces;
 using OneExpense.Business.Notifications;
@@ -11,13 +15,16 @@ namespace OneExpense.API.Configuration
     {
         public static IServiceCollection ResolveDependencies(this IServiceCollection services)
         {
-            services.AddScoped<IImageFileService, ImageFileService>();
-
+            services.AddScoped<ICompanyUserService, CompanyUserService>();
             services.AddScoped<INotifier, Notifier>();
 
+            services.AddScoped<IImageFileService, ImageFileService>();
+
+            services.AddScoped<ICompanyRepository, CompanyRepository>();
             services.AddScoped<IExpenseReportRepository, ExpenseReportRepository>();
             services.AddScoped<IExpenseReportDetailRepository, ExpenseReportDetailRepository>();
 
+            services.AddScoped<ICompanyService, CompanyService>();
             services.AddScoped<IExpenseReportService, ExpenseReportService>();
             services.AddScoped<IExpenseReportDetailService, ExpenseReportDetailService>();
 

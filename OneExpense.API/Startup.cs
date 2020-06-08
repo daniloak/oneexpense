@@ -24,6 +24,8 @@ namespace OneExpense.API
 
             services.ResolveDependencies();
 
+            services.AddAuthorizationConfig();
+
             services.AddSwaggerConfiguration();
         }
 

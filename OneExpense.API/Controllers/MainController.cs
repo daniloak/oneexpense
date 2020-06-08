@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using OneExpense.API.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -8,7 +10,15 @@ namespace OneExpense.API.Controllers
     [ApiController]
     public abstract class MainController : ControllerBase
     {
+        public readonly ICompanyUserService AppUser;
         protected ICollection<string> Errors = new List<string>();
+
+        protected Guid UserId => AppUser.GetUserId(); 
+
+        public MainController(ICompanyUserService appUser)
+        {
+            AppUser = appUser;
+        }
 
         protected ActionResult ApiResponse(object result = null)
         {

@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using OneExpense.API.Interfaces;
 
 namespace OneExpense.API.Controllers
 {
@@ -13,7 +9,8 @@ namespace OneExpense.API.Controllers
     public class TestController : MainController
     {
         public string MyProperty { get; set; }
-        public TestController(IConfiguration configuration)
+        public TestController(IConfiguration configuration,
+            ICompanyUserService appUser) : base(appUser)
         {
             MyProperty = configuration.GetConnectionString("DefaultConnection");
         }

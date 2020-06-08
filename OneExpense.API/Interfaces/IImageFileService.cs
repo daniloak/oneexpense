@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace OneExpense.Business.Interfaces
+namespace OneExpense.API.Interfaces
 {
     public interface IImageFileService
     {

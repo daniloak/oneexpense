@@ -14,6 +14,7 @@ namespace OneExpense.Data.Context
 
         }
 
+        public DbSet<Company> Companies { get; set; }
         public DbSet<ExpenseReport> ExpenseReports { get; set; }
         public DbSet<ExpenseReportDetail> ExpenseReportDetails { get; set; }
 
@@ -46,6 +47,7 @@ namespace OneExpense.Data.Context
                 if (entry.State == EntityState.Modified)
                 {
                     entry.Property("CreateDate").IsModified = false;
+                    entry.Property("UserId").IsModified = false;
                 }
             }
 

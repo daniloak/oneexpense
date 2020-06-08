@@ -1,9 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace OneExpense.API.ViewModel
 {
     public class UserRecord
     {
+        public Guid CompanyId { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }
         public string PasswordConfirmation { get; set; }

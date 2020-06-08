@@ -6,8 +6,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
-using OneExpense.API.Data;
+using OneExpense.API.Authorization;
 using OneExpense.API.Extensions;
+using OneExpense.API.Validators;
+using OneExpense.Business.Models;
+using OneExpense.Data;
 using System.Text;
 
 namespace OneExpense.API.Configuration
@@ -21,10 +24,11 @@ namespace OneExpense.API.Configuration
                 options.UseNpgsql(configuration.GetConnectionString("DefaultConnection"));
             });
 
-            services.AddDefaultIdentity<IdentityUser>()
+            services.AddDefaultIdentity<CompanyUser>()
                 .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
-                .AddDefaultTokenProviders();
+                .AddDefaultTokenProviders()
+                .AddUserValidator<CompanyUserValidator>();
 
             var appSettingsSection = configuration.GetSection("AppSettings");
             services.Configure<AppSettings>(appSettingsSection);

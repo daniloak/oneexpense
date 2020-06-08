@@ -13,14 +13,15 @@ namespace OneExpense.Data.Repository
     {
         public ExpenseReportRepository(OneExpenseDbContext context) : base(context) { }
 
-        public async Task<IEnumerable<ExpenseReport>> GetCompleteExpenseReport()
+        public async Task<IEnumerable<ExpenseReport>> GetCompleteExpenseReport(Guid userId)
         {
             return await Db.ExpenseReports.AsNoTracking()
                 .Include(c => c.Details)
+                .Where(c => c.UserId == userId)
                 .ToListAsync();
         }
 
-        public async Task<ExpenseReport> GetCompleteExpenseReportById(Guid id)
+        public async Task<ExpenseReport> GetCompleteExpenseReportById(Guid id, Guid userId)
         {
             return await Db.ExpenseReports.AsNoTracking()
                 .Include(c => c.Details)

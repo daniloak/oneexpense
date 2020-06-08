@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using OneExpense.Data.Context;
@@ -9,9 +10,10 @@ using OneExpense.Data.Context;
 namespace OneExpense.Data.Migrations
 {
     [DbContext(typeof(OneExpenseDbContext))]
-    partial class OneExpenseDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200607223117_AddUserId")]
+    partial class AddUserId
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

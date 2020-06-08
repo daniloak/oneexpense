@@ -8,7 +8,7 @@ namespace OneExpense.Business.Interfaces
 {
     public interface IExpenseReportRepository : IRepository<ExpenseReport>
     {
-        Task<IEnumerable<ExpenseReport>> GetCompleteExpenseReport();
-        Task<ExpenseReport> GetCompleteExpenseReportById(Guid id);
+        Task<IEnumerable<ExpenseReport>> GetCompleteExpenseReport(Guid userId);
+        Task<ExpenseReport> GetCompleteExpenseReportById(Guid id, Guid userId);
     }
 }

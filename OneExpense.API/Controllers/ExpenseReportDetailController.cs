@@ -1,18 +1,20 @@
 ﻿using AutoMapper;
 using Flurl;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using OneExpense.API.Interfaces;
 using OneExpense.API.ViewModel;
 using OneExpense.Business.Interfaces;
 using OneExpense.Business.Models;
 using System;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace OneExpense.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class ExpenseReportDetailController : MainController
     {
         private readonly IMapper _mapper;
@@ -25,7 +27,8 @@ namespace OneExpense.API.Controllers
                                              IExpenseReportDetailRepository expenseReportDetailRepository,
                                              IExpenseReportDetailService expenseReportDetailService,
                                              IImageFileService imageFileService,
-                                             IConfiguration configuration)
+                                             IConfiguration configuration,
+                                             ICompanyUserService appUser) : base(appUser)
         {
             _mapper = mapper;
             _expenseReportDetailRepository = expenseReportDetailRepository;

@@ -13,6 +13,7 @@ namespace OneExpense.API.Configuration
     {
         public static IServiceCollection AddApiConfiguration(this IServiceCollection services, IConfiguration configuration)
         {
+            services.AddHttpContextAccessor();
             services.AddControllers()
                 .AddJsonOptions(options=>
                 {
