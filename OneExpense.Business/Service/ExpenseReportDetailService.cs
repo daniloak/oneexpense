@@ -25,6 +25,11 @@ namespace OneExpense.Business.Service
             if (!Validate(new ExpenseReportDetailValidation(), expenseReportDetail)) return;
 
             await _expenseReportDetailRepository.Add(expenseReportDetail);
+
+            var expense = await _expenseReportRepository.GetById(expenseReportDetail.ExpenseId);
+            expense.Total += expenseReportDetail.Amount;
+
+            await _expenseReportRepository.Update(expense);
         }
 
         public async Task Update(ExpenseReportDetail expenseReportDetail)
@@ -32,6 +37,11 @@ namespace OneExpense.Business.Service
             if (!Validate(new ExpenseReportDetailValidation(), expenseReportDetail)) return;
 
             await _expenseReportDetailRepository.Update(expenseReportDetail);
+
+            var expense = await _expenseReportRepository.GetById(expenseReportDetail.ExpenseId);
+            expense.Total = expense.Details.Sum(p => p.Amount);
+
+            await _expenseReportRepository.Update(expense);
         }
 
         public async Task Delete(Guid id)
