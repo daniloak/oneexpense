@@ -20,34 +20,40 @@ namespace OneExpense.Business.Service
             _expenseReportDetailRepository = expenseDetailRepository;
         }
 
-        public async Task Add(ExpenseReport expenseReport)
+        public async Task<bool> Add(ExpenseReport expenseReport)
         {
             expenseReport.Total = expenseReport.Details.Sum(p => p.Amount);
 
-            if (!Validate(new ExpenseReportValidation(), expenseReport)) return;
+            if (!Validate(new ExpenseReportValidation(), expenseReport)) return false;
 
-            await _expenseReportRepository.Add(expenseReport);
+            _expenseReportRepository.Add(expenseReport);
+
+            return await _expenseReportRepository.UnitOfWork.Commit();
         }
 
-        public async Task Update(ExpenseReport expenseReport)
+        public async Task<bool> Update(ExpenseReport expenseReport)
         {
             expenseReport.Total = expenseReport.Details.Sum(p => p.Amount);
 
-            if (!Validate(new ExpenseReportValidation(), expenseReport)) return;
+            if (!Validate(new ExpenseReportValidation(), expenseReport)) return false;
 
-            await _expenseReportRepository.Update(expenseReport);
+            _expenseReportRepository.Update(expenseReport);
+
+            return await _expenseReportRepository.UnitOfWork.Commit();
         }
 
-        public async Task Delete(Guid id)
+        public async Task<bool> Delete(Guid id)
         {
             var expenseDetails = await _expenseReportDetailRepository.GetDetailsByExpenseId(id);
 
             foreach(var expenseDetail in expenseDetails)
             {
-                await _expenseReportDetailRepository.Delete(expenseDetail.Id);
+                _expenseReportDetailRepository.Delete(expenseDetail.Id);
             }
 
-            await _expenseReportRepository.Delete(id);
+            _expenseReportRepository.Delete(id);
+
+            return await _expenseReportRepository.UnitOfWork.Commit();
         }
 
         public void Dispose()

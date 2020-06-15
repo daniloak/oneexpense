@@ -6,8 +6,8 @@ namespace OneExpense.Business.Interfaces
 {
     public interface IExpenseReportDetailService : IDisposable
     {
-        Task Add(ExpenseReportDetail expenseReportDetail);
-        Task Update(ExpenseReportDetail expenseReportDetail);
-        Task Delete(Guid id);
+        Task<bool> Add(ExpenseReportDetail expenseReportDetail);
+        Task<bool> Update(ExpenseReportDetail expenseReportDetail);
+        Task<bool> Delete(Guid id);
     }
 }

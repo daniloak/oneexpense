@@ -16,7 +16,6 @@ using System.Threading.Tasks;
 namespace OneExpense.API.Controllers
 {
     [Route("api/[controller]")]
-    [ApiController]
     [Authorize]
     public class ExpenseReportController : MainController
     {
@@ -69,7 +68,7 @@ namespace OneExpense.API.Controllers
             {
                 return new ForbidResult();
             }
-            
+
             var blobURL = _configuration.GetValue<string>("Azure:AZURE_BLOB_URL");
 
             foreach (var expenseDetail in expense.Details.Where(p => p.Image != null))
@@ -96,7 +95,9 @@ namespace OneExpense.API.Controllers
             var expense = _mapper.Map<ExpenseReport>(expenseReportViewModel);
             expense.UserId = UserId;
 
-            await _expenseReportService.Add(expense);
+            var success = await _expenseReportService.Add(expense);
+
+            if (!success) return BadRequest();
 
             return NoContent();
         }
@@ -115,7 +116,9 @@ namespace OneExpense.API.Controllers
 
             var expenseToUpdate = _mapper.Map<ExpenseReport>(expenseReportViewModel);
 
-            await _expenseReportService.Update(expenseToUpdate);
+            var success = await _expenseReportService.Update(expenseToUpdate);
+
+            if (!success) return BadRequest();
 
             return NoContent();
         }
@@ -132,7 +135,9 @@ namespace OneExpense.API.Controllers
                 return new ForbidResult();
             }
 
-            await _expenseReportService.Delete(id);
+            var success = await _expenseReportService.Delete(id);
+
+            if (!success) return BadRequest();
 
             return NoContent();
         }

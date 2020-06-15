@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using OneExpense.Business.Interfaces;
 using OneExpense.Business.Models;
 using System;
 using System.Linq;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace OneExpense.Data.Context
 {
-    public class OneExpenseDbContext : DbContext
+    public class OneExpenseDbContext : DbContext, IUnitOfWork
     {
         public OneExpenseDbContext(DbContextOptions<OneExpenseDbContext> options) : base(options)
         {
@@ -52,6 +53,11 @@ namespace OneExpense.Data.Context
             }
 
             return base.SaveChangesAsync(cancellationToken);
+        }
+
+        public async Task<bool> Commit()
+        {
+            return await base.SaveChangesAsync() > 0;
         }
     }
 }

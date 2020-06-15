@@ -8,8 +8,8 @@ namespace OneExpense.Business.Interfaces
 {
     public interface ICompanyService : IDisposable
     {
-        Task Add(Company company);
-        Task Update(Company company);
-        Task Delete(Guid id);
+        Task<bool> Add(Company company);
+        Task<bool> Update(Company company);
+        Task<bool> Delete(Guid id);
     }
 }

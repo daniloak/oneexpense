@@ -21,6 +21,8 @@ namespace OneExpense.Data.Repository
             DbSet = db.Set<TEntity>();
         }
 
+        public IUnitOfWork UnitOfWork => Db;
+
         public async Task<IEnumerable<TEntity>> Get(Expression<Func<TEntity, bool>> predicate)
         {
             return await DbSet.AsNoTracking().Where(predicate).ToListAsync();
@@ -36,27 +38,19 @@ namespace OneExpense.Data.Repository
             return await DbSet.ToListAsync();
         }
 
-        public virtual async Task Add(TEntity entity)
+        public virtual void Add(TEntity entity)
         {
             DbSet.Add(entity);
-            await SaveChanges();
         }
 
-        public virtual async Task Update(TEntity entity)
+        public virtual void Update(TEntity entity)
         {
             DbSet.Update(entity);
-            await SaveChanges();
         }
 
-        public virtual async Task Delete(Guid id)
+        public virtual void Delete(Guid id)
         {
             DbSet.Remove(new TEntity { Id = id });
-            await SaveChanges();
-        }
-
-        public async Task<int> SaveChanges()
-        {
-            return await Db.SaveChangesAsync();
         }
 
         public void Dispose()

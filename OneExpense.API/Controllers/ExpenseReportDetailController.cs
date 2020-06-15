@@ -44,7 +44,7 @@ namespace OneExpense.API.Controllers
             var blobURL = _configuration.GetValue<string>("Azure:AZURE_BLOB_URL");
             expense.Image = blobURL.AppendPathSegment(expense.Image);
 
-            if (expense == null) return NotFound();
+            if (expense == null) return BadRequest();
 
             return expense;
         }
@@ -58,7 +58,9 @@ namespace OneExpense.API.Controllers
             expenseReportViewModel.Image = imageName;
 
             var expense = _mapper.Map<ExpenseReportDetail>(expenseReportViewModel);
-            await _expenseReportDetailService.Add(expense);
+            var success = await _expenseReportDetailService.Add(expense);
+
+            if (!success) return BadRequest();
 
             return NoContent();
         }
@@ -66,7 +68,9 @@ namespace OneExpense.API.Controllers
         [HttpPut("{id:guid}")]
         public async Task<IActionResult> Update(Guid id, ExpenseReportDetailViewModel expenseReportDetailViewModel)
         {
-            await _expenseReportDetailService.Update(_mapper.Map<ExpenseReportDetail>(expenseReportDetailViewModel));
+            var success =  await _expenseReportDetailService.Update(_mapper.Map<ExpenseReportDetail>(expenseReportDetailViewModel));
+
+            if (!success) return BadRequest();
 
             return NoContent();
         }
@@ -78,7 +82,9 @@ namespace OneExpense.API.Controllers
 
             if (expenseReportDetailViewModel == null) return NotFound();
 
-            await _expenseReportDetailService.Delete(id);
+            var success =  await _expenseReportDetailService.Delete(id);
+
+            if (!success) return BadRequest();
 
             return NoContent();
         }

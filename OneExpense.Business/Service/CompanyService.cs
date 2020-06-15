@@ -13,17 +13,19 @@ namespace OneExpense.Business.Service
             _companyRepository = companyRepository;
         }
 
-        public async Task Add(Company company)
+        public async Task<bool> Add(Company company)
         {
-            await _companyRepository.Add(company);
+            _companyRepository.Add(company);
+
+            return await _companyRepository.UnitOfWork.Commit();
         }
 
-        public Task Update(Company company)
+        public Task<bool> Update(Company company)
         {
             throw new NotImplementedException();
         }
 
-        public async Task Delete(Guid id)
+        public async Task<bool> Delete(Guid id)
         {
             throw new NotImplementedException();
         }

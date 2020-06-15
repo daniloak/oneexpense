@@ -20,33 +20,39 @@ namespace OneExpense.Business.Service
             _expenseReportDetailRepository = expenseDetailRepository;
         }
 
-        public async Task Add(ExpenseReportDetail expenseReportDetail)
+        public async Task<bool> Add(ExpenseReportDetail expenseReportDetail)
         {
-            if (!Validate(new ExpenseReportDetailValidation(), expenseReportDetail)) return;
+            if (!Validate(new ExpenseReportDetailValidation(), expenseReportDetail)) return false;
 
-            await _expenseReportDetailRepository.Add(expenseReportDetail);
+            _expenseReportDetailRepository.Add(expenseReportDetail);
 
             var expense = await _expenseReportRepository.GetById(expenseReportDetail.ExpenseId);
             expense.Total += expenseReportDetail.Amount;
 
-            await _expenseReportRepository.Update(expense);
+            _expenseReportRepository.Update(expense);
+
+            return await _expenseReportRepository.UnitOfWork.Commit();
         }
 
-        public async Task Update(ExpenseReportDetail expenseReportDetail)
+        public async Task<bool> Update(ExpenseReportDetail expenseReportDetail)
         {
-            if (!Validate(new ExpenseReportDetailValidation(), expenseReportDetail)) return;
+            if (!Validate(new ExpenseReportDetailValidation(), expenseReportDetail)) return false;
 
-            await _expenseReportDetailRepository.Update(expenseReportDetail);
+            _expenseReportDetailRepository.Update(expenseReportDetail);
 
             var expense = await _expenseReportRepository.GetById(expenseReportDetail.ExpenseId);
             expense.Total = expense.Details.Sum(p => p.Amount);
 
-            await _expenseReportRepository.Update(expense);
+            _expenseReportRepository.Update(expense);
+
+            return await _expenseReportRepository.UnitOfWork.Commit();
         }
 
-        public async Task Delete(Guid id)
+        public async Task<bool> Delete(Guid id)
         {
-            await _expenseReportDetailRepository.Delete(id);
+            _expenseReportDetailRepository.Delete(id);
+
+            return await _expenseReportDetailRepository.UnitOfWork.Commit();
         }
 
         public void Dispose()
