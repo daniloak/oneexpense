@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using OneExpense.API.Interfaces;
+using OneExpense.Business.Interfaces;
+using OneExpense.Business.Notifications;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,14 +12,16 @@ namespace OneExpense.API.Controllers
     [ApiController]
     public abstract class MainController : ControllerBase
     {
+        private readonly INotifier _notifier;
         public readonly ICompanyUserService AppUser;
-        protected ICollection<string> Errors = new List<string>();
 
-        protected Guid UserId => AppUser.GetUserId(); 
+        protected Guid UserId => AppUser.GetUserId();
 
-        public MainController(ICompanyUserService appUser)
+        public MainController(ICompanyUserService appUser,
+                              INotifier notifier)
         {
             AppUser = appUser;
+            _notifier = notifier;
         }
 
         protected ActionResult ApiResponse(object result = null)
@@ -27,25 +31,16 @@ namespace OneExpense.API.Controllers
                 return Ok(result);
             }
 
-            return BadRequest(new ValidationProblemDetails(new Dictionary<string, string[]>
+            ModelStateDictionary errors = new ModelStateDictionary();
+            foreach (var notification in _notifier.GetNotifications())
             {
-                { "Details", Errors.ToArray() }
-            }));
-        }
-
-        protected ActionResult ApiResponse(ModelStateDictionary modelState)
-        {
-            var errors = modelState.Values.SelectMany(e => e.Errors);
-            foreach (var error in errors)
-            {
-                AddError(error.ErrorMessage);
+                errors.AddModelError(notification.Property, notification.Message);
             }
 
-            return ApiResponse();
+            return BadRequest(new ValidationProblemDetails(errors));
         }
 
-        protected bool IsValid() => !Errors.Any();
-        protected void AddError(string error) => Errors.Add(error);
-        protected void ClearErrors() => Errors.Clear();
+        protected bool IsValid() => !_notifier.NotifactionExists();
+        protected void AddError(string property, string error) => _notifier.Handle(new Notification(property, error));
     }
 }

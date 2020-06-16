@@ -26,13 +26,14 @@ namespace OneExpense.API.Controllers
         private readonly IConfiguration _configuration;
         private readonly IAuthorizationService _authorizationService;
 
-        public ExpenseReportController(IMapper mapper,
+        public ExpenseReportController(INotifier notifier,   
+                                       IMapper mapper,
                                        IExpenseReportRepository expenseRepository,
                                        IExpenseReportService expenseService,
                                        IImageFileService imageFileService,
                                        IConfiguration configuration,
                                        ICompanyUserService appUser,
-                                       IAuthorizationService authorizationService) : base(appUser)
+                                       IAuthorizationService authorizationService) : base(appUser, notifier)
         {
             _mapper = mapper;
             _expenseReportRepository = expenseRepository;
@@ -97,7 +98,7 @@ namespace OneExpense.API.Controllers
 
             var success = await _expenseReportService.Add(expense);
 
-            if (!success) return BadRequest();
+            if (!success) return ApiResponse(ModelState);
 
             return NoContent();
         }

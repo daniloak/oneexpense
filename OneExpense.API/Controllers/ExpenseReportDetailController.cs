@@ -23,12 +23,13 @@ namespace OneExpense.API.Controllers
         private readonly IImageFileService _imageFileService;
         private readonly IConfiguration _configuration;
 
-        public ExpenseReportDetailController(IMapper mapper,
+        public ExpenseReportDetailController(INotifier notifier, 
+                                             IMapper mapper,
                                              IExpenseReportDetailRepository expenseReportDetailRepository,
                                              IExpenseReportDetailService expenseReportDetailService,
                                              IImageFileService imageFileService,
                                              IConfiguration configuration,
-                                             ICompanyUserService appUser) : base(appUser)
+                                             ICompanyUserService appUser) : base(appUser, notifier)
         {
             _mapper = mapper;
             _expenseReportDetailRepository = expenseReportDetailRepository;

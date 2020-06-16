@@ -19,13 +19,13 @@ namespace OneExpense.Business.Service
         {
             foreach (var error in validationResult.Errors)
             {
-                Notify(error.ErrorMessage);
+                Notify(error.PropertyName, error.ErrorMessage);
             }
         }
 
-        protected void Notify(string message)
+        protected void Notify(string property, string message)
         {
-            _notifier.Handle(new Notification(message));
+            _notifier.Handle(new Notification(property, message));
         }
 
         protected bool Validate<TV, TE>(TV validation, TE entity) 

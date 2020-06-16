@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using OneExpense.API.Interfaces;
+using OneExpense.Business.Interfaces;
 
 namespace OneExpense.API.Controllers
 {
@@ -9,8 +10,8 @@ namespace OneExpense.API.Controllers
     public class TestController : MainController
     {
         public string MyProperty { get; set; }
-        public TestController(IConfiguration configuration,
-            ICompanyUserService appUser) : base(appUser)
+        public TestController(INotifier notifier, IConfiguration configuration,
+            ICompanyUserService appUser) : base(appUser, notifier)
         {
             MyProperty = configuration.GetConnectionString("DefaultConnection");
         }

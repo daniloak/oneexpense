@@ -6,11 +6,13 @@ namespace OneExpense.Business.Notifications
 {
     public class Notification
     {
-        public Notification(string message)
+        public Notification(string property, string message)
         {
+            Property = property;
             Message = message;
         }
 
+        public string Property { get; }
         public string Message { get; }
     }
 }

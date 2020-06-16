@@ -19,9 +19,10 @@ namespace OneExpense.API.Controllers
     {
         private readonly IMapper _mapper;
         private readonly ICompanyService _companyService;
-        public CompanyController(IMapper mapper,
+        public CompanyController(INotifier notifier,
+                                 IMapper mapper,
                                  ICompanyService companyService,
-                                 ICompanyUserService appUser) : base(appUser)
+                                 ICompanyUserService appUser) : base(appUser, notifier)
         {
             _mapper = mapper;
             _companyService = companyService;

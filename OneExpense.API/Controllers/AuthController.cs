@@ -6,6 +6,7 @@ using OneExpense.API.Controllers;
 using OneExpense.API.Extensions;
 using OneExpense.API.Interfaces;
 using OneExpense.API.ViewModel;
+using OneExpense.Business.Interfaces;
 using OneExpense.Business.Models;
 using System;
 using System.Collections.Generic;
@@ -25,10 +26,11 @@ namespace OneExpenseAuth.Controllers
         private readonly UserManager<CompanyUser> _userManager;
         private readonly AppSettings _appSettings;
 
-        public AuthController(SignInManager<CompanyUser> signInManager,
+        public AuthController(INotifier notifier,
+                              SignInManager<CompanyUser> signInManager,
                               UserManager<CompanyUser> userManager,
                               IOptions<AppSettings> appSettings,
-                              ICompanyUserService appUser) : base(appUser)
+                              ICompanyUserService appUser) : base(appUser, notifier)
         {
             _signInManager = signInManager;
             _userManager = userManager;
@@ -55,7 +57,7 @@ namespace OneExpenseAuth.Controllers
 
             foreach (var error in result.Errors)
             {
-                AddError(error.Description);
+                AddError("User", error.Description);
             }
 
             return ApiResponse();
@@ -71,7 +73,7 @@ namespace OneExpenseAuth.Controllers
                 return ApiResponse(await CreateJWT(userLogin.Email));
             }
 
-            AddError("User or password incorrect");
+            AddError("User", "User or password incorrect");
 
             return ApiResponse();
         }
