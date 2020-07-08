@@ -83,7 +83,7 @@ namespace OneExpense.API.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<ExpenseReportViewModel>> Add(ExpenseReportViewModel expenseReportViewModel)
+        public async Task<IActionResult> Add(ExpenseReportViewModel expenseReportViewModel)
         {
             foreach (var expenseReportDetail in expenseReportViewModel.Details.Where(p => p.Image != null))
             {

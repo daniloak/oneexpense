@@ -6,7 +6,9 @@ using OneExpense.API.Controllers;
 using OneExpense.API.Extensions;
 using OneExpense.API.Interfaces;
 using OneExpense.API.ViewModel;
+using OneExpense.Business.Events;
 using OneExpense.Business.Interfaces;
+using OneExpense.Business.Mediator;
 using OneExpense.Business.Models;
 using System;
 using System.Collections.Generic;
@@ -25,16 +27,19 @@ namespace OneExpenseAuth.Controllers
         private readonly SignInManager<CompanyUser> _signInManager;
         private readonly UserManager<CompanyUser> _userManager;
         private readonly AppSettings _appSettings;
+        private readonly IMediatorHandler _mediatorHandler;
 
         public AuthController(INotifier notifier,
                               SignInManager<CompanyUser> signInManager,
                               UserManager<CompanyUser> userManager,
                               IOptions<AppSettings> appSettings,
-                              ICompanyUserService appUser) : base(appUser, notifier)
+                              ICompanyUserService appUser,
+                              IMediatorHandler mediatorHandler) : base(appUser, notifier)
         {
             _signInManager = signInManager;
             _userManager = userManager;
             _appSettings = appSettings.Value;
+            _mediatorHandler = mediatorHandler;
         }
 
         [HttpPost("Create")]
@@ -49,6 +54,7 @@ namespace OneExpenseAuth.Controllers
             };
 
             var result = await _userManager.CreateAsync(user, userRecord.Password);
+            _mediatorHandler.PublishEvent(new CompanyUserRegisteredEvent(userRecord.CompanyId, userRecord.Email, userRecord.Password, userRecord.PasswordConfirmation));
 
             if (result.Succeeded)
             {

@@ -57,7 +57,7 @@ namespace OneExpense.Data.Context
 
         public async Task<bool> Commit()
         {
-            return await base.SaveChangesAsync() > 0;
+            return await SaveChangesAsync() > 0;
         }
     }
 }
