@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
@@ -28,18 +29,21 @@ namespace OneExpenseAuth.Controllers
         private readonly UserManager<CompanyUser> _userManager;
         private readonly AppSettings _appSettings;
         private readonly IMediatorHandler _mediatorHandler;
+        private readonly IEmailSender _emailSender;
 
         public AuthController(INotifier notifier,
                               SignInManager<CompanyUser> signInManager,
                               UserManager<CompanyUser> userManager,
                               IOptions<AppSettings> appSettings,
                               ICompanyUserService appUser,
-                              IMediatorHandler mediatorHandler) : base(appUser, notifier)
+                              IMediatorHandler mediatorHandler,
+                              IEmailSender emailSender) : base(appUser, notifier)
         {
             _signInManager = signInManager;
             _userManager = userManager;
             _appSettings = appSettings.Value;
             _mediatorHandler = mediatorHandler;
+            _emailSender = emailSender;
         }
 
         [HttpPost("Create")]
@@ -52,9 +56,16 @@ namespace OneExpenseAuth.Controllers
                 EmailConfirmed = true,
                 CompanyId = userRecord.CompanyId
             };
+            var dete = await _userManager.FindByEmailAsync(user.Email);
+            await _userManager.DeleteAsync(dete);
 
             var result = await _userManager.CreateAsync(user, userRecord.Password);
-            _mediatorHandler.PublishEvent(new CompanyUserRegisteredEvent(userRecord.CompanyId, userRecord.Email, userRecord.Password, userRecord.PasswordConfirmation));
+            await _mediatorHandler.PublishEvent(new CompanyUserRegisteredEvent(userRecord.CompanyId, userRecord.Email, userRecord.Password, userRecord.PasswordConfirmation));
+
+            //var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+            //var confirmationLink = Url.Action(nameof(ConfirmEmail), "Auth", new { token, email = user.Email }, Request.Scheme);
+
+            //await _emailSender.SendEmailAsync(user.Email, "Email confirmation", confirmationLink);
 
             if (result.Succeeded)
             {
@@ -65,6 +76,20 @@ namespace OneExpenseAuth.Controllers
             {
                 AddError("User", error.Description);
             }
+
+            return ApiResponse();
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> ConfirmEmail(string token, string email)
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+            if (user == null)
+                AddError(string.Empty, "Invalid email");
+
+            var result = await _userManager.ConfirmEmailAsync(user, token);
+            if (!result.Succeeded)
+                AddError(string.Empty, "Email could not be confirmed");
 
             return ApiResponse();
         }

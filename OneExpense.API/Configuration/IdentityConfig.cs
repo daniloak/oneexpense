@@ -2,11 +2,13 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using OneExpense.API.Authorization;
+using OneExpense.API.EmailSender;
 using OneExpense.API.Extensions;
 using OneExpense.API.Validators;
 using OneExpense.Business.Models;
@@ -24,17 +26,23 @@ namespace OneExpense.API.Configuration
                 options.UseNpgsql(configuration.GetConnectionString("DefaultConnection"));
             });
 
-            services.AddDefaultIdentity<CompanyUser>()
-                .AddRoles<IdentityRole>()
-                .AddEntityFrameworkStores<ApplicationDbContext>()
-                .AddDefaultTokenProviders()
-                .AddUserValidator<CompanyUserValidator>();
+            services.AddDefaultIdentity<CompanyUser>(opt=>
+            {
+                //opt.SignIn.RequireConfirmedEmail = true;
+            })
+            .AddRoles<IdentityRole>()
+            .AddEntityFrameworkStores<ApplicationDbContext>()
+            .AddDefaultTokenProviders()
+            .AddUserValidator<CompanyUserValidator>();
 
             var appSettingsSection = configuration.GetSection("AppSettings");
             services.Configure<AppSettings>(appSettingsSection);
 
             var appSettings = appSettingsSection.Get<AppSettings>();
             var key = Encoding.ASCII.GetBytes(appSettings.Secret);
+
+            services.AddTransient<IEmailSender, EmailSenderService>();
+            services.Configure<AuthMessageSenderOptions>(configuration);
 
             services.AddAuthentication(options =>
             {
