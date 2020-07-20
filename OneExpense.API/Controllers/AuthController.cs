@@ -56,8 +56,8 @@ namespace OneExpenseAuth.Controllers
                 EmailConfirmed = true,
                 CompanyId = userRecord.CompanyId
             };
-            var dete = await _userManager.FindByEmailAsync(user.Email);
-            await _userManager.DeleteAsync(dete);
+            //var dete = await _userManager.FindByEmailAsync(user.Email);
+            //await _userManager.DeleteAsync(dete);
 
             var result = await _userManager.CreateAsync(user, userRecord.Password);
             await _mediatorHandler.PublishEvent(new CompanyUserRegisteredEvent(userRecord.CompanyId, userRecord.Email, userRecord.Password, userRecord.PasswordConfirmation));
