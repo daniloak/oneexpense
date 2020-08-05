@@ -9,6 +9,11 @@ namespace OneExpense.Business.Events
 {
     public class CompanyUserEventHandler : INotificationHandler<CompanyUserRegisteredEvent>
     {
+        public CompanyUserEventHandler()
+        {
+
+        }
+
         public Task Handle(CompanyUserRegisteredEvent notification, CancellationToken cancellationToken)
         {
             return Task.CompletedTask;

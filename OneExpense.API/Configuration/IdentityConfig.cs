@@ -41,7 +41,7 @@ namespace OneExpense.API.Configuration
             var appSettings = appSettingsSection.Get<AppSettings>();
             var key = Encoding.ASCII.GetBytes(appSettings.Secret);
 
-            services.AddTransient<IEmailSender, EmailSenderService>();
+            services.AddScoped<IEmailSender, EmailSenderService>();
             services.Configure<AuthMessageSenderOptions>(configuration);
 
             services.AddAuthentication(options =>
